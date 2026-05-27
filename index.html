@@ -1,0 +1,421 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.hero{text-align:center;padding:2rem 1rem 1.2rem;background:var(--color-background-primary,#fff);border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0)}
+.hero-tag{display:inline-block;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#534AB7;background:#EEEDFE;border-radius:99px;padding:3px 12px;margin-bottom:10px}
+.hero h1{font-size:24px;font-weight:500;color:var(--color-text-primary,#111);line-height:1.3;margin-bottom:5px}
+.hero p{font-size:14px;color:var(--color-text-secondary,#666);max-width:400px;margin:0 auto}
+.tabs{display:flex;gap:6px;padding:.8rem 1rem 0;overflow-x:auto;scrollbar-width:none;background:var(--color-background-primary,#fff)}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{flex-shrink:0;font-size:12px;font-weight:500;padding:5px 12px;border-radius:99px;border:0.5px solid var(--color-border-secondary,rgba(0,0,0,.2));background:transparent;color:var(--color-text-secondary,#666);cursor:pointer;transition:all .2s}
+.tab-btn.active{color:var(--color-text-primary,#111);border-color:var(--color-border-primary,rgba(0,0,0,.35));box-shadow:0 0 0 1px var(--color-border-primary,rgba(0,0,0,.35))}
+.prog-wrap{background:var(--color-background-primary,#fff);padding:10px 0 10px;border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0)}
+.prog-bar{height:3px;background:var(--color-border-tertiary,#e0e0e0);border-radius:99px;margin:0 1.2rem;overflow:hidden}
+.prog-fill{height:100%;border-radius:99px;background:#7F77DD;transition:width .6s cubic-bezier(.34,1.56,.64,1)}
+.prog-lbl{font-size:11px;color:var(--color-text-tertiary,#aaa);text-align:right;padding:3px 1.2rem 0}
+.wrap{padding:1.2rem .8rem 2rem;max-width:700px;margin:0 auto}
+
+.card{background:var(--color-background-primary,#fff);border:0.5px solid var(--color-border-tertiary,#e0e0e0);border-radius:14px;overflow:hidden;margin-bottom:1rem;transform:translateY(40px) scale(0.95);opacity:0;transition:transform .5s cubic-bezier(.34,1.56,.64,1), opacity .4s ease}
+.card.in{transform:translateY(0) scale(1);opacity:1}
+
+.card-top{display:flex;align-items:stretch}
+.illus-wrap{flex-shrink:0;width:140px;display:flex;align-items:center;justify-content:center;padding:1rem .5rem;position:relative;overflow:hidden}
+.illus-wrap svg{position:relative;z-index:2}
+
+.ripple-ring{position:absolute;border-radius:50%;border:2px solid;opacity:0;transform:scale(0);animation:ripple 1.2s ease-out forwards}
+@keyframes ripple{0%{transform:scale(0);opacity:.6}100%{transform:scale(2.8);opacity:0}}
+
+.card-info{flex:1;padding:1rem 1rem 1rem .5rem}
+.card-num{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;opacity:0;transform:translateX(-10px);transition:all .4s ease .2s}
+.card-num.in{opacity:1;transform:translateX(0)}
+.card-title{font-size:17px;font-weight:500;color:var(--color-text-primary,#111);margin-bottom:6px;line-height:1.25;opacity:0;transform:translateX(-10px);transition:all .4s ease .3s}
+.card-title.in{opacity:1;transform:translateX(0)}
+.card-body{font-size:13px;color:var(--color-text-secondary,#555);line-height:1.65;margin-bottom:8px;opacity:0;transform:translateX(-10px);transition:all .4s ease .4s}
+.card-body.in{opacity:1;transform:translateX(0)}
+.card-quote{font-size:12px;font-style:italic;color:var(--color-text-tertiary,#888);border-left:2px solid var(--color-border-secondary,#ccc);padding-left:8px;margin-bottom:10px;border-radius:0;opacity:0;transform:translateX(-10px);transition:all .4s ease .5s}
+.card-quote.in{opacity:1;transform:translateX(0)}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.tag{font-size:11px;padding:2px 9px;border-radius:99px;border:0.5px solid var(--color-border-tertiary,#e0e0e0);color:var(--color-text-secondary,#555);background:var(--color-background-secondary,#f5f5f5);opacity:0;transform:translateY(6px);transition:all .3s ease}
+.ask-btn{font-size:12px;padding:5px 12px;border-radius:8px;border:0.5px solid var(--color-border-secondary,rgba(0,0,0,.2));background:transparent;color:var(--color-text-secondary,#555);cursor:pointer;display:inline-flex;align-items:center;gap:5px;opacity:0;transition:opacity .4s ease .7s}
+.ask-btn.in{opacity:1}
+.ask-btn:hover{background:var(--color-background-secondary,#f0f0f0)}
+
+.nav-row{display:flex;gap:8px;margin-top:.5rem;opacity:0;transform:translateY(10px);transition:all .4s ease .6s}
+.nav-row.in{opacity:1;transform:translateY(0)}
+
+.all-view{padding:1.2rem .8rem 2rem;max-width:700px;margin:0 auto}
+.mini{background:var(--color-background-primary,#fff);border:0.5px solid var(--color-border-tertiary,#e0e0e0);border-radius:12px;padding:.8rem 1rem;margin-bottom:10px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1), background .15s;transform:scale(1)}
+.mini:hover{transform:scale(1.02);background:var(--color-background-secondary,#f5f5f5)}
+.mini:active{transform:scale(0.98)}
+.mini-enter{animation:miniIn .35s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes miniIn{from{opacity:0;transform:translateY(16px) scale(0.95)}to{opacity:1;transform:none}}
+.mini-illus{flex-shrink:0;width:56px;height:56px}
+.mini-text{flex:1}
+.mini-title{font-size:14px;font-weight:500;color:var(--color-text-primary,#111)}
+.mini-sub{font-size:12px;color:var(--color-text-secondary,#666);margin-top:2px}
+
+.particles-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:3}
+
+.illus-svg{transition:transform .6s cubic-bezier(.34,1.56,.64,1);transform:scale(0) rotate(-15deg)}
+.illus-svg.in{transform:scale(1) rotate(0deg)}
+
+.accent-top{height:4px;transition:transform .5s ease;transform:scaleX(0);transform-origin:left}
+.accent-top.in{transform:scaleX(1)}
+
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.illus-pulse{animation:pulse 3s ease-in-out infinite}
+</style>
+
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Línea del tiempo interactiva ilustrada con efectos: La máquina del ser humano</h2>
+
+<div class="hero">
+  <div class="hero-tag">Humanidades</div>
+  <h1>La máquina del ser humano</h1>
+  <p>Toca un tema para descubrirlo</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+  <div class="prog-lbl" id="prog-lbl">0 de 6 temas explorados</div>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab-btn active" onclick="showAll()">Todos</button>
+  <button class="tab-btn" onclick="go(0)">1. Asombro</button>
+  <button class="tab-btn" onclick="go(1)">2. Vida examinada</button>
+  <button class="tab-btn" onclick="go(2)">3. Historia</button>
+  <button class="tab-btn" onclick="go(3)">4. Violencia</button>
+  <button class="tab-btn" onclick="go(4)">5. Ética</button>
+  <button class="tab-btn" onclick="go(5)">6. Identidad</button>
+</div>
+
+<div id="all-view" class="all-view"></div>
+<div id="topic-view" class="wrap" style="display:none"></div>
+
+<canvas id="global-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999"></canvas>
+
+<script>
+const TOPICS=[
+{num:'01',title:'Asombro',sub:'El inicio de todo pensamiento',accent:'#7F77DD',bg:'#EEEDFE',txt:'#534AB7',
+body:'El asombro es la chispa que enciende la filosofía. Cuando algo nos sorprende, la mente pregunta: ¿por qué? ¿cómo? Aristóteles decía que la filosofía nació del asombro: sin curiosidad no hay ciencia, arte ni pensamiento crítico.',
+quote:'"La filosofía comienza con el asombro." — Aristóteles',
+tags:['Filosofía','Curiosidad','Pensamiento crítico','Preguntas'],
+ask:'Explícame más sobre el asombro como inicio del pensamiento filosófico',
+svg:`<svg class="illus-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="60" cy="62" rx="34" ry="22" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+  <ellipse cx="60" cy="62" rx="14" ry="14" fill="#7F77DD"/>
+  <ellipse cx="60" cy="62" rx="7" ry="7" fill="#26215C"/>
+  <ellipse cx="55" cy="58" rx="2.5" ry="2.5" fill="#fff"/>
+  <path d="M26 62 Q60 30 94 62" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M26 62 Q60 94 94 62" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="38" cy="30" r="9" fill="#FAC775" stroke="#BA7517" stroke-width="1"/>
+  <line x1="38" y1="18" x2="38" y2="14" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="30" y1="22" x2="27" y2="19" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="46" y1="22" x2="49" y2="19" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="60" y="18" text-anchor="middle" font-size="13" fill="#534AB7">?</text>
+  <text x="80" y="28" text-anchor="middle" font-size="11" fill="#7F77DD">?</text>
+  <text x="72" y="95" text-anchor="middle" font-size="9" fill="#534AB7" font-weight="500">ASOMBRO</text>
+</svg>`},
+{num:'02',title:'Vida examinada',sub:'Conocerse para comprender el mundo',accent:'#1D9E75',bg:'#E1F5EE',txt:'#0F6E56',
+body:'Sócrates afirmó que "una vida no examinada no merece ser vivida". Reflexionar sobre quiénes somos, qué valoramos y hacia dónde vamos nos permite tomar decisiones más conscientes y entender mejor a los demás.',
+quote:'"Conócete a ti mismo." — Oráculo de Delfos',
+tags:['Autoconocimiento','Reflexión','Sócrates','Conciencia'],
+ask:'Dame un ejercicio de reflexión para examinar mi propia vida',
+svg:`<svg class="illus-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <rect x="52" y="30" width="36" height="55" rx="3" fill="#B4B2A9" stroke="#888780" stroke-width="1"/>
+  <rect x="54" y="32" width="32" height="49" rx="2" fill="#E6F1FB"/>
+  <ellipse cx="44" cy="58" rx="13" ry="16" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.2"/>
+  <ellipse cx="44" cy="50" rx="7" ry="8" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1"/>
+  <line x1="44" y1="58" x2="44" y2="70" stroke="#085041" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="44" y1="63" x2="38" y2="68" stroke="#085041" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="44" y1="63" x2="50" y2="68" stroke="#085041" stroke-width="1.2" stroke-linecap="round"/>
+  <ellipse cx="70" cy="56" rx="11" ry="13" fill="#9FE1CB" stroke="#1D9E75" stroke-width="0.8"/>
+  <ellipse cx="70" cy="49" rx="5.5" ry="6" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.8"/>
+  <line x1="70" y1="58" x2="70" y2="66" stroke="#1D9E75" stroke-width="1" stroke-linecap="round"/>
+  <text x="60" y="99" text-anchor="middle" font-size="9" fill="#0F6E56" font-weight="500">VIDA EXAMINADA</text>
+</svg>`},
+{num:'03',title:'Ser humano e historia',sub:'De dónde venimos hasta hoy',accent:'#378ADD',bg:'#E6F1FB',txt:'#185FA5',
+body:'La historia es la memoria colectiva de la humanidad. Al estudiarla, entendemos cómo las civilizaciones evolucionaron y por qué vivimos como vivimos hoy. Somos el resultado de millones de decisiones pasadas.',
+quote:'"Los pueblos que no conocen su historia están condenados a repetirla." — Burke',
+tags:['Historia','Civilización','Evolución','Memoria colectiva'],
+ask:'Cuáles son los momentos más importantes en la historia del ser humano',
+svg:`<svg class="illus-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="60" cy="85" rx="38" ry="12" fill="#B5D4F4" stroke="#378ADD" stroke-width="1"/>
+  <ellipse cx="60" cy="80" rx="28" ry="9" fill="#E6F1FB"/>
+  <g transform="translate(18,62) scale(0.55)">
+    <ellipse cx="10" cy="0" rx="7" ry="8" fill="#D3D1C7"/>
+    <line x1="10" y1="8" x2="10" y2="22" stroke="#888780" stroke-width="2"/>
+    <line x1="10" y1="13" x2="3" y2="19" stroke="#888780" stroke-width="1.5"/>
+    <line x1="10" y1="13" x2="17" y2="19" stroke="#888780" stroke-width="1.5"/>
+    <line x1="10" y1="22" x2="5" y2="33" stroke="#888780" stroke-width="1.5"/>
+    <line x1="10" y1="22" x2="15" y2="33" stroke="#888780" stroke-width="1.5"/>
+  </g>
+  <g transform="translate(34,56) scale(0.65)">
+    <ellipse cx="10" cy="0" rx="7" ry="8" fill="#B4B2A9"/>
+    <line x1="10" y1="8" x2="10" y2="24" stroke="#5F5E5A" stroke-width="2"/>
+    <line x1="10" y1="15" x2="2" y2="22" stroke="#5F5E5A" stroke-width="1.5"/>
+    <line x1="10" y1="15" x2="18" y2="22" stroke="#5F5E5A" stroke-width="1.5"/>
+    <line x1="10" y1="24" x2="5" y2="36" stroke="#5F5E5A" stroke-width="1.5"/>
+    <line x1="10" y1="24" x2="15" y2="36" stroke="#5F5E5A" stroke-width="1.5"/>
+  </g>
+  <g transform="translate(54,48) scale(0.78)">
+    <ellipse cx="10" cy="0" rx="7" ry="8" fill="#85B7EB"/>
+    <line x1="10" y1="8" x2="10" y2="26" stroke="#185FA5" stroke-width="2"/>
+    <line x1="10" y1="16" x2="1" y2="24" stroke="#185FA5" stroke-width="1.5"/>
+    <line x1="10" y1="16" x2="19" y2="24" stroke="#185FA5" stroke-width="1.5"/>
+    <line x1="10" y1="26" x2="4" y2="38" stroke="#185FA5" stroke-width="1.5"/>
+    <line x1="10" y1="26" x2="16" y2="38" stroke="#185FA5" stroke-width="1.5"/>
+  </g>
+  <g transform="translate(74,40)">
+    <ellipse cx="10" cy="0" rx="8" ry="9" fill="#378ADD"/>
+    <line x1="10" y1="9" x2="10" y2="28" stroke="#0C447C" stroke-width="2"/>
+    <line x1="10" y1="17" x2="0" y2="26" stroke="#0C447C" stroke-width="1.5"/>
+    <line x1="10" y1="17" x2="20" y2="26" stroke="#0C447C" stroke-width="1.5"/>
+    <line x1="10" y1="28" x2="3" y2="40" stroke="#0C447C" stroke-width="1.5"/>
+    <line x1="10" y1="28" x2="17" y2="40" stroke="#0C447C" stroke-width="1.5"/>
+  </g>
+  <path d="M20 80 L100 80" stroke="#378ADD" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="60" y="108" text-anchor="middle" font-size="9" fill="#185FA5" font-weight="500">SER HUMANO E HISTORIA</text>
+</svg>`},
+{num:'04',title:'Violencia y crueldad',sub:'Entender lo oscuro para transformarlo',accent:'#D85A30',bg:'#FAECE7',txt:'#993C1D',
+body:'El ser humano tiene capacidad para la violencia, pero también para transformarla. Las humanidades nos invitan a estudiar el conflicto para comprender sus causas y construir alternativas basadas en la empatía y la justicia.',
+quote:'"La paz no es la ausencia de conflicto, sino la presencia de la justicia." — M.L. King',
+tags:['Conflicto','Empatía','Justicia','Transformación social'],
+ask:'Por qué es importante estudiar la violencia para superarla como sociedad',
+svg:`<svg class="illus-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <path d="M20 85 Q60 20 100 85 Z" fill="#FAECE7" stroke="#D85A30" stroke-width="1.2"/>
+  <path d="M35 85 Q60 38 85 85 Z" fill="#F5C4B3" stroke="#D85A30" stroke-width="0.8"/>
+  <circle cx="60" cy="52" r="10" fill="#D85A30"/>
+  <path d="M54 47 L60 40 L66 47" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="60" y1="62" x2="60" y2="75" stroke="#993C1D" stroke-width="2" stroke-linecap="round"/>
+  <line x1="52" y1="68" x2="68" y2="68" stroke="#993C1D" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="60" y1="75" x2="53" y2="83" stroke="#993C1D" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="60" y1="75" x2="67" y2="83" stroke="#993C1D" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M20 88 L100 88" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M28 88 Q30 78 36 83 Q40 76 44 82" fill="none" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="44" cy="82" r="3" fill="#1D9E75"/>
+  <text x="60" y="106" text-anchor="middle" font-size="9" fill="#993C1D" font-weight="500">VIOLENCIA Y CRUELDAD</text>
+</svg>`},
+{num:'05',title:'Ética y decisión',sub:'Elegir con base en valores',accent:'#BA7517',bg:'#FAEEDA',txt:'#854F0B',
+body:'Cada día tomamos decisiones con consecuencias. La ética nos da herramientas para distinguir lo correcto de lo incorrecto. Reflexionar éticamente significa preguntarse: ¿mis acciones respetan la dignidad de los demás?',
+quote:'"Actúa de tal modo que trates a la humanidad siempre como un fin." — Kant',
+tags:['Ética','Valores','Decisiones','Responsabilidad','Dignidad'],
+ask:'Cómo puedo tomar mejores decisiones éticas en mi vida cotidiana',
+svg:`<svg class="illus-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="28" x2="60" y2="82" stroke="#BA7517" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="60" y1="44" x2="28" y2="55" stroke="#BA7517" stroke-width="2" stroke-linecap="round"/>
+  <line x1="60" y1="44" x2="92" y2="55" stroke="#BA7517" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="60" cy="28" r="5" fill="#EF9F27" stroke="#BA7517" stroke-width="1.2"/>
+  <ellipse cx="28" cy="62" rx="16" ry="9" fill="#FAEEDA" stroke="#BA7517" stroke-width="1.2"/>
+  <ellipse cx="92" cy="58" rx="16" ry="9" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.2"/>
+  <path d="M18 62 Q28 54 38 62" fill="none" stroke="#BA7517" stroke-width="1" stroke-linecap="round"/>
+  <path d="M18 62 Q28 70 38 62" fill="none" stroke="#BA7517" stroke-width="1" stroke-linecap="round"/>
+  <circle cx="28" cy="62" r="4" fill="#EF9F27"/>
+  <path d="M82 58 Q92 50 102 58" fill="none" stroke="#1D9E75" stroke-width="1" stroke-linecap="round"/>
+  <path d="M82 58 Q92 66 102 58" fill="none" stroke="#1D9E75" stroke-width="1" stroke-linecap="round"/>
+  <circle cx="92" cy="58" r="4" fill="#1D9E75"/>
+  <line x1="48" y1="82" x2="72" y2="82" stroke="#BA7517" stroke-width="2" stroke-linecap="round"/>
+  <line x1="48" y1="82" x2="48" y2="86" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="72" y1="82" x2="72" y2="86" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="60" y="100" text-anchor="middle" font-size="9" fill="#854F0B" font-weight="500">ÉTICA Y DECISIÓN</text>
+</svg>`},
+{num:'06',title:'Identidad humana',sub:'Construir quiénes somos y seremos',accent:'#D4537E',bg:'#FBEAF0',txt:'#993556',
+body:'La identidad humana es un proceso dinámico: se construye con experiencias, valores, historia y relaciones. Las humanidades nos dan lenguaje para narrarnos y herramientas para reinventarnos a lo largo de la vida.',
+quote:'"No somos lo que nos pasó, somos lo que elegimos ser." — Carl Jung (adaptado)',
+tags:['Identidad','Autonarrativa','Cultura','Pertenencia','Futuro'],
+ask:'Cómo construyo mi identidad según las humanidades',
+svg:`<svg class="illus-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="60" cy="55" r="32" fill="#FBEAF0" stroke="#D4537E" stroke-width="1.2"/>
+  <ellipse cx="60" cy="37" rx="13" ry="14" fill="#F4C0D1" stroke="#D4537E" stroke-width="1"/>
+  <path d="M38 72 Q60 60 82 72" fill="none" stroke="#D4537E" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="60" y1="51" x2="60" y2="70" stroke="#993556" stroke-width="2" stroke-linecap="round"/>
+  <line x1="60" y1="59" x2="46" y2="67" stroke="#993556" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="60" y1="59" x2="74" y2="67" stroke="#993556" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="60" y1="70" x2="52" y2="80" stroke="#993556" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="60" y1="70" x2="68" y2="80" stroke="#993556" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M20 90 Q40 78 60 82 Q80 78 100 90" fill="none" stroke="#ED93B1" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="20" cy="90" r="4" fill="#D4537E"/>
+  <circle cx="60" cy="82" r="4" fill="#D4537E"/>
+  <circle cx="100" cy="90" r="4" fill="#D4537E"/>
+  <text x="60" y="108" text-anchor="middle" font-size="9" fill="#993556" font-weight="500">IDENTIDAD HUMANA</text>
+</svg>`}
+];
+
+const visited=new Set();
+let cur=0;
+
+const gCanvas=document.getElementById('global-canvas');
+const gCtx=gCanvas.getContext('2d');
+let particles=[];
+let animId=null;
+
+function resizeCanvas(){
+  gCanvas.width=window.innerWidth;
+  gCanvas.height=window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize',resizeCanvas);
+
+function spawnParticles(color,x,y){
+  resizeCanvas();
+  const rect=gCanvas.getBoundingClientRect();
+  for(let i=0;i<28;i++){
+    const angle=Math.random()*Math.PI*2;
+    const speed=2+Math.random()*5;
+    const size=3+Math.random()*6;
+    particles.push({
+      x,y,
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed-2,
+      alpha:1,size,
+      color,
+      decay:0.02+Math.random()*0.02,
+      gravity:0.12
+    });
+  }
+  if(!animId) animateParticles();
+}
+
+function animateParticles(){
+  gCtx.clearRect(0,0,gCanvas.width,gCanvas.height);
+  particles=particles.filter(p=>p.alpha>0);
+  particles.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy;
+    p.vy+=p.gravity;
+    p.vx*=0.97;
+    p.alpha-=p.decay;
+    gCtx.save();
+    gCtx.globalAlpha=Math.max(0,p.alpha);
+    gCtx.fillStyle=p.color;
+    gCtx.beginPath();
+    gCtx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    gCtx.fill();
+    gCtx.restore();
+  });
+  if(particles.length>0){
+    animId=requestAnimationFrame(animateParticles);
+  } else {
+    animId=null;
+    gCtx.clearRect(0,0,gCanvas.width,gCanvas.height);
+  }
+}
+
+function triggerEffect(el,color){
+  const rect=el.getBoundingClientRect();
+  const cx=rect.left+rect.width/2;
+  const cy=rect.top+rect.height/2;
+  spawnParticles(color,cx,cy);
+}
+
+function updateProg(){
+  const p=Math.round(visited.size/TOPICS.length*100);
+  document.getElementById('prog').style.width=p+'%';
+  document.getElementById('prog-lbl').textContent=visited.size+' de '+TOPICS.length+' temas explorados';
+}
+
+function buildAll(){
+  const el=document.getElementById('all-view');
+  let h='';
+  TOPICS.forEach((t,i)=>{
+    const seen=visited.has(i);
+    const delay=i*80;
+    h+=`<div class="mini mini-enter" style="animation-delay:${delay}ms" onclick="go(${i})" id="mini-${i}">
+      <div style="width:4px;align-self:stretch;background:${t.accent};border-radius:2px;flex-shrink:0"></div>
+      <div class="mini-illus">${t.svg}</div>
+      <div class="mini-text">
+        <div class="mini-title">${t.num}. ${t.title}</div>
+        <div class="mini-sub">${t.sub}</div>
+      </div>
+      ${seen?`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${t.accent}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-tertiary,#aaa)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'}
+    </div>`;
+  });
+  h+=`<div style="background:var(--color-background-secondary,#f5f4f0);border-radius:12px;padding:.8rem 1rem;margin-top:.5rem;text-align:center;animation:miniIn .4s .5s both">
+    <p style="font-size:12px;color:var(--color-text-secondary,#666);font-style:italic;line-height:1.6">"Las humanidades nos enseñan a pensar, a comprender y a ser mejores humanos"</p>
+  </div>`;
+  el.innerHTML=h;
+}
+
+function buildCard(i){
+  const t=TOPICS[i];
+  return `<div class="card" id="main-card">
+    <div class="accent-top" id="accent-bar" style="background:${t.accent}"></div>
+    <div class="card-top">
+      <div class="illus-wrap" style="background:${t.bg};" id="illus-wrap">
+        ${t.svg}
+        <div class="ripple-ring" id="ripple" style="width:80px;height:80px;left:30px;top:30px;border-color:${t.accent}"></div>
+      </div>
+      <div class="card-info">
+        <div class="card-num" id="cn" style="color:${t.txt}">Tema ${t.num}</div>
+        <div class="card-title" id="ct">${t.title}</div>
+        <div class="card-body" id="cb">${t.body}</div>
+        <div class="card-quote" id="cq">${t.quote}</div>
+        <div class="tags" id="ctags">${t.tags.map((tg,ti)=>`<span class="tag" id="tag-${ti}" style="transition-delay:${.55+ti*.07}s">${tg}</span>`).join('')}</div>
+        <button class="ask-btn" id="ask-b" onclick="sendPrompt('${t.ask}')"><i class="ti ti-message-circle" aria-hidden="true"></i> Explorar más ↗</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function go(i){
+  cur=i; visited.add(i); updateProg(); buildAll();
+  document.getElementById('all-view').style.display='none';
+  const tv=document.getElementById('topic-view');
+  tv.style.display='block';
+  tv.innerHTML=buildCard(i)+`<div class="nav-row" id="nav-row">
+    <button class="ask-btn" onclick="nav(-1)" ${i===0?'disabled style="opacity:.35"':''}>
+      <i class="ti ti-arrow-left" aria-hidden="true"></i> Anterior</button>
+    <button class="ask-btn" onclick="nav(1)" ${i===TOPICS.length-1?'disabled style="opacity:.35"':''}>
+      Siguiente <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    <button class="ask-btn" onclick="showAll()" style="margin-left:auto">
+      <i class="ti ti-layout-grid" aria-hidden="true"></i> Ver todos</button>
+  </div>`;
+
+  const illus=document.getElementById('illus-wrap');
+  triggerEffect(illus, TOPICS[i].accent);
+
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      const card=document.getElementById('main-card');
+      if(card) card.classList.add('in');
+      const ab=document.getElementById('accent-bar');
+      if(ab) ab.classList.add('in');
+      const svg=tv.querySelector('.illus-svg');
+      if(svg){setTimeout(()=>svg.classList.add('in'),80);}
+      ['cn','ct','cb','cq'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el) el.classList.add('in');
+      });
+      TOPICS[i].tags.forEach((_,ti)=>{
+        const el=document.getElementById('tag-'+ti);
+        if(el) setTimeout(()=>{el.style.opacity='1';el.style.transform='none';},550+ti*70);
+      });
+      const ab2=document.getElementById('ask-b');
+      if(ab2) ab2.classList.add('in');
+      const nr=document.getElementById('nav-row');
+      if(nr) nr.classList.add('in');
+      const rr=document.getElementById('ripple');
+      if(rr){
+        setTimeout(()=>{rr.style.animation='ripple 1s ease-out forwards';},200);
+        setTimeout(()=>{rr.style.animation='ripple 1s ease-out forwards';rr.style.animationDelay='0.3s';},500);
+      }
+      const illusSvg=tv.querySelector('.illus-svg');
+      if(illusSvg) setTimeout(()=>illusSvg.classList.add('illus-pulse'),700);
+    });
+  });
+
+  const tabs=document.querySelectorAll('.tab-btn');
+  tabs.forEach((b,idx)=>b.classList.toggle('active',idx===i+1));
+}
+
+function nav(d){const n=cur+d;if(n>=0&&n<TOPICS.length)go(n);}
+
+function showAll(){
+  document.getElementById('all-view').style.display='block';
+  document.getElementById('topic-view').style.display='none';
+  buildAll();
+  const tabs=document.querySelectorAll('.tab-btn');
+  tabs.forEach((b,idx)=>b.classList.toggle('active',idx===0));
+}
+
+buildAll();
+</script>
